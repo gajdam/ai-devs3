@@ -1,4 +1,3 @@
-import os
-from dotenv import load_dotenv
+from ex1 import handle_login, init_web
 
-load_dotenv()
+handle_login(init_web())
