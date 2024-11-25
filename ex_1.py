@@ -11,9 +11,11 @@ password = os.getenv("PASSWORD")
 url = 'https://xyz.ag3nts.org/'
 url2 = 'https://xyz.ag3nts.org/login'
 
-driver = webdriver.Edge()
+driver = None
 
 def get_question() -> str:
+    driver = webdriver.Edge()
+
     driver.get(url)
     element = driver.find_element(By.XPATH, '//*[@id="human-question"]')
     text_value = element.text

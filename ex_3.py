@@ -1,41 +1,62 @@
 import os
-import openai
+from idlelib.iomenu import encoding
+from io import text_encoding
+from services import openai_service
 import requests
 from dotenv import load_dotenv
 import json
 
 
-def get_input_data(url: str) -> list:
+def get_input_data(url: str):
+    file_name = 'data.json'
     response = requests.get(url)
     response.raise_for_status()
-    test_data = response.json().get('test-data', [])
 
-    return test_data
+    with open(file_name, 'w') as f:
+        json.dump(response.json(), f)
+
+    return file_name
 
 
-def analyze_questions(questions_list: list) -> list:
-    corrected_questions = []
+def validate_and_correct_data(file_path: str):
+    with open(file_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
 
-    for question in questions_list:
-        question_text = question.get('question')
+    test_data = data.get("test-data", [])
+    for item in test_data:
+        question_text = item.get("question")
 
-        answer = question.get('answer')
-        test = question.get('test')
+        answer = item.get("answer")
+        test = item.get("test")
+        correct_answer = evaluate_question(question_text)
 
         if test:
-            print(f'Test question found: {test.get('q')}')
-            # test.get['a'] = get_gpt_answer(test.get('q'))
+            print(f'Test question found: {test.get("q")}')
+            test["a"] = openai_service.get_answer(test.get("q"))
 
-        if answer != eval(question_text):
+        if answer != correct_answer:
             print(f"Incorrect answer found: {question_text}, {answer}")
-            question['answer'] = eval(question_text)
+            item['answer'] = correct_answer
 
-        print(question)
+    return data
 
 
-load_dotenv()
-api_key = os.getenv("HEADQUARTERS_API_KEY")
-url = f"https://centrala.ag3nts.org/data/{api_key}/json.txt"
+def evaluate_question(question_text: str):
+    return eval(question_text)
 
-questions = get_input_data(url)
-analyze_questions(questions)
+
+def send_answer(api_url, api_key, answer_data):
+    answer_data["apikey"] = api_key
+    data = {
+        "task": "JSON",
+        "apikey": api_key,
+        "answer": answer_data
+    }
+    print(data)  # Możesz usunąć to w produkcji
+    try:
+        response = requests.post(api_url, json=data)  # Korzystamy z `json=data` do automatycznego kodowania na JSON
+        response.raise_for_status()
+
+        print("API answer: ", response.json())
+    except requests.exceptions.RequestException as e:
+        print("Error ---", e)
