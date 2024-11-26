@@ -39,20 +39,3 @@ def validate_and_correct_data(file_path: str):
 
 def evaluate_question(question_text: str):
     return eval(question_text)
-
-
-def send_answer(api_url, api_key, answer_data):
-    answer_data["apikey"] = api_key
-    data = {
-        "task": "JSON",
-        "apikey": api_key,
-        "answer": answer_data
-    }
-    print(data)
-    try:
-        response = requests.post(api_url, json=data)
-        response.raise_for_status()
-
-        print("API answer: ", response.json())
-    except requests.exceptions.RequestException as e:
-        print("Error ---", e)

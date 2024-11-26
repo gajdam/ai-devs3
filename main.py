@@ -2,7 +2,7 @@ import os
 from ex_1 import get_question, submit_from
 from ex_2 import start_verification
 from ex_3 import validate_and_correct_data, get_input_data
-from ex_5 import get_input_data, send_answer
+from ex_5 import get_input_data
 from services import openai_service
 from dotenv import load_dotenv
 from submit_task_service import send_answer
@@ -18,13 +18,13 @@ def run_ex_3(url, api_key):
     data = get_input_data(url)
     json = validate_and_correct_data(data)
 
-    send_answer(api_url, api_key, json)
+    send_answer('JSON', api_key, json)
 
 def run_ex_5(url: str):
     tmp = get_input_data(url)
     tmp = 'censor user data. Enter the word CENZURA in place of name, city and street and age. Return it as string without " characters' + tmp
     answer = openai_service.get_answer(tmp)
-    send_answer(api_url, api_key, answer)
+    send_answer('CENZURA', api_key,  answer)
 
 load_dotenv()
 api_url = 'https://centrala.ag3nts.org/report'
