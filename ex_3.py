@@ -1,9 +1,5 @@
-import os
-from idlelib.iomenu import encoding
-from io import text_encoding
 from services import openai_service
 import requests
-from dotenv import load_dotenv
 import json
 
 
@@ -52,9 +48,9 @@ def send_answer(api_url, api_key, answer_data):
         "apikey": api_key,
         "answer": answer_data
     }
-    print(data)  # Możesz usunąć to w produkcji
+    print(data)
     try:
-        response = requests.post(api_url, json=data)  # Korzystamy z `json=data` do automatycznego kodowania na JSON
+        response = requests.post(api_url, json=data)
         response.raise_for_status()
 
         print("API answer: ", response.json())
