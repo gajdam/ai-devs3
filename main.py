@@ -5,6 +5,7 @@ from ex_3 import validate_and_correct_data, get_input_data
 from ex_5 import get_input_data, send_answer
 from services import openai_service
 from dotenv import load_dotenv
+from submit_task_service import send_answer
 
 def run_ex_1():
     question = get_question()
