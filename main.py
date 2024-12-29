@@ -8,12 +8,13 @@ load_dotenv()
 api_key = os.getenv("HEADQUARTERS_API_KEY")
 open_ai_key = os.getenv("OPENAI_API_KEY")
 
-transcriptions = transcribe_files(r"C:\Users\gajda\Downloads\przesluchania", open_ai_key)
-print(transcriptions)
-prompt = prepare_prompt(transcriptions)
-
-openai_service = OpenAiService(open_ai_key)
-print(openai_service.get_answer(prompt))
+#
+# transcriptions = transcribe_files(r"C:\Users\gajda\Downloads\przesluchania", open_ai_key)
+# print(transcriptions)
+# prompt = prepare_prompt(transcriptions)
+#
+openai_service = OpenAiService(open_ai_key, "dall-e-3")
+# print(openai_service.get_answer(prompt))
 
 
 
