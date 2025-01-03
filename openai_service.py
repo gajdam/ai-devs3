@@ -70,3 +70,10 @@ class OpenAiService:
         except Exception as e:
             print(f"Error while generating image: {e}")
             return None
+
+    def generate_embedding(self, input: str):
+        completion = self.client.embeddings.create(
+            model="text-embedding-ada-002",
+            input=input
+        )
+        return completion.data[0].embedding
