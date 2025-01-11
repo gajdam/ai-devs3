@@ -1,12 +1,12 @@
 from openai import OpenAI
 
 class OpenAiService:
-    def __init__(self, api_key: str, model: str = "gpt-4", temperature: float = 0.7):
+    def __init__(self, api_key: str, model: str = "gpt-4o", temperature: float = 0.7):
         self.client = OpenAI(api_key=api_key)
         self.model = model
         self.temperature = temperature
 
-    def get_answer(self, prompt: str, system_message: str = "You are a helpful assistant.") -> str:
+    def get_answer(self, prompt: str, system_message = "You are a helpful assistant.") -> str:
         try:
             completion = self.client.chat.completions.create(
                 model=self.model,
